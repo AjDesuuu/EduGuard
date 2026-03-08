@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useAuth } from "@/context/AuthContext";
 import { Card, Button, Badge } from "@/components/UI";
 import {
   Shield,
@@ -18,6 +19,7 @@ interface VerificationResult {
 }
 
 export default function VerifyPage() {
+  const { user } = useAuth();
   const [content, setContent] = useState("");
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +27,10 @@ export default function VerifyPage() {
 
   const handleVerify = async () => {
     if (!content && !url) return;
+    if (!user?.id) {
+      console.error("User must be logged in to verify content");
+      return;
+    }
 
     setLoading(true);
     try {
@@ -32,16 +38,21 @@ export default function VerifyPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          studentId: 1,
+          studentId: user.id,
           content,
           url,
         }),
       });
 
       const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Verification failed");
+      }
+
       setResult({
         credibilityScore: data.credibilityScore,
-        flags: data.flags,
+        flags: Array.isArray(data.flags) ? data.flags : [],
         analysis: data.analysis,
       });
     } catch (error) {
