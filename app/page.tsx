@@ -26,18 +26,25 @@ export default function Home() {
           </span>
         </div>
         <h1 className="text-4xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-          {isAuthenticated ? `Welcome back, ${user?.name?.split(' ')[0]}!` : 'Welcome to EduGuard'}
+          {isAuthenticated
+            ? `Welcome back, ${user?.name?.split(" ")[0]}!`
+            : "Welcome to EduGuard"}
         </h1>
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
-          {isAuthenticated 
-            ? 'Continue your learning journey with personalized AI-driven content'
-            : 'Personalized learning pathways with AI-driven content verification and digital literacy training'
-          }
+          {isAuthenticated
+            ? "Continue your learning journey with personalized AI-driven content"
+            : "Personalized learning pathways with AI-driven content verification and digital literacy training"}
         </p>
         <div className="flex gap-4 justify-center">
           {isAuthenticated ? (
             <Link
-              href={user?.role === 'educator' ? '/educator/dashboard' : user?.role === 'admin' ? '/admin/dashboard' : '/dashboard'}
+              href={
+                user?.role === "educator"
+                  ? "/educator/dashboard"
+                  : user?.role === "admin"
+                    ? "/admin/dashboard"
+                    : "/dashboard"
+              }
               className="inline-flex items-center gap-2 bg-primary text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition-colors text-lg font-semibold"
             >
               Go to Dashboard

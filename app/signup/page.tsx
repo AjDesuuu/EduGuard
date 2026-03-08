@@ -40,12 +40,12 @@ export default function SignupPage() {
   useEffect(() => {
     if (isAuthenticated && user) {
       // Redirect already logged-in users to their dashboard
-      if (user.role === 'educator') {
-        router.push('/educator/dashboard');
-      } else if (user.role === 'admin') {
-        router.push('/admin/dashboard');
+      if (user.role === "educator") {
+        router.push("/educator/dashboard");
+      } else if (user.role === "admin") {
+        router.push("/admin/dashboard");
       } else {
-        router.push('/dashboard');
+        router.push("/dashboard");
       }
     }
   }, [isAuthenticated, user, router]);
