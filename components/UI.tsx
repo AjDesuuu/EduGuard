@@ -85,7 +85,11 @@ interface BadgeProps {
   className?: string;
 }
 
-export function Badge({ children, variant = "info", className = "" }: BadgeProps) {
+export function Badge({
+  children,
+  variant = "info",
+  className = "",
+}: BadgeProps) {
   const variantStyles = {
     success:
       "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",

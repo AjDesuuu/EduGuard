@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
+
+const sql = neon(process.env.DATABASE_URL!);
 
 export async function POST(request: Request) {
   try {
@@ -22,7 +24,7 @@ export async function POST(request: Request) {
       success: true,
       credibilityScore,
       flags,
-      analysis: result.rows[0],
+      analysis: result[0],
     });
   } catch (error) {
     return NextResponse.json(

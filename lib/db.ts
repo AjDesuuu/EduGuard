@@ -1,4 +1,12 @@
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
+
+// Initialize the Neon serverless SQL client
+const sql = neon(process.env.DATABASE_URL!);
+
+export async function getData() {
+  const data = await sql`SELECT * FROM posts;`;
+  return data;
+}
 
 export async function initDatabase() {
   try {
@@ -82,8 +90,8 @@ export async function getDemoStudent() {
       SELECT * FROM students WHERE email = 'demo@eduguard.com' LIMIT 1
     `;
 
-    if (result.rows.length > 0) {
-      return result.rows[0];
+    if (result.length > 0) {
+      return result[0];
     }
 
     // Create demo student
@@ -93,7 +101,7 @@ export async function getDemoStudent() {
       RETURNING *
     `;
 
-    return newStudent.rows[0];
+    return newStudent[0];
   } catch (error) {
     console.error("Error getting demo student:", error);
     return null;

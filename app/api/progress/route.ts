@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
-import { sql } from "@vercel/postgres";
+import { neon } from "@neondatabase/serverless";
+
+const sql = neon(process.env.DATABASE_URL!);
 
 export async function GET() {
   try {
@@ -10,11 +12,11 @@ export async function GET() {
       SELECT * FROM students WHERE id = ${studentId}
     `;
 
-    if (studentResult.rows.length === 0) {
+    if (studentResult.length === 0) {
       return NextResponse.json({ error: "Student not found" }, { status: 404 });
     }
 
-    const student = studentResult.rows[0];
+    const student = studentResult[0];
 
     // Get learning progress stats
     const progressResult = await sql`
@@ -46,7 +48,7 @@ export async function GET() {
       LIMIT 7
     `;
 
-    const stats = progressResult.rows[0];
+    const stats = progressResult[0];
 
     return NextResponse.json({
       student,
@@ -56,8 +58,8 @@ export async function GET() {
         averageScore: Math.round(parseFloat(stats.average_score) || 0),
         digitalLiteracyScore: student.digital_literacy_score,
         totalTimeSpent: parseInt(stats.total_time_spent) || 0,
-        recentActivity: recentActivity.rows,
-        performanceTrend: trend.rows.reverse(),
+        recentActivity: recentActivity,
+        performanceTrend: trend.reverse(),
       },
     });
   } catch (error) {
@@ -93,7 +95,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
-      progress: result.rows[0],
+      progress: result[0],
     });
   } catch (error) {
     return NextResponse.json(
