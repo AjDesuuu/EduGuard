@@ -87,14 +87,14 @@ export default function Home() {
         />
         <FeatureCard
           icon={<BookOpen className="w-8 h-8" />}
-          title="Digital Literacy"
-          description="Learn to evaluate sources and identify AI-generated content"
+          title="Modules"
+          description="Learn from verified materials provided by our educators"
           href="/modules"
         />
         <FeatureCard
           icon={<Award className="w-8 h-8" />}
           title="Track Progress"
-          description="Monitor your learning journey and digital literacy score"
+          description="Monitor your learning journey and module completion"
           href="/dashboard"
         />
       </section>
