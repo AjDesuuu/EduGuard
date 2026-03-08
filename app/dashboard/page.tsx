@@ -177,9 +177,7 @@ export default function Dashboard() {
           </li>
           <li className="flex items-start gap-2">
             <span className="text-primary mt-1">•</span>
-            <span>
-              Complete 2 more modules to reach 75% proficiency
-            </span>
+            <span>Complete 2 more modules to reach 75% proficiency</span>
           </li>
           <li className="flex items-start gap-2">
             <span className="text-primary mt-1">•</span>
