@@ -82,9 +82,10 @@ export function ProgressBar({
 interface BadgeProps {
   children: React.ReactNode;
   variant?: "success" | "warning" | "danger" | "info";
+  className?: string;
 }
 
-export function Badge({ children, variant = "info" }: BadgeProps) {
+export function Badge({ children, variant = "info", className = "" }: BadgeProps) {
   const variantStyles = {
     success:
       "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
@@ -96,7 +97,7 @@ export function Badge({ children, variant = "info" }: BadgeProps) {
 
   return (
     <span
-      className={`px-3 py-1 rounded-full text-sm font-medium ${variantStyles[variant]}`}
+      className={`px-3 py-1 rounded-full text-sm font-medium ${variantStyles[variant]} ${className}`}
     >
       {children}
     </span>
