@@ -12,11 +12,17 @@ export async function POST(request: Request) {
     const credibilityScore = calculateCredibilityScore(content, url);
     const flags = detectFlags(content, url);
 
+    // Convert flags array to PostgreSQL array format
+    const flagsArray =
+      flags.length > 0
+        ? `{${flags.map((f) => `"${f.replace(/"/g, '\\"')}"`).join(",")}}`
+        : "{}";
+
     // Save to database
     const result = await sql`
       INSERT INTO misinformation_checks 
       (student_id, url, content, credibility_score, flags)
-      VALUES (${studentId}, ${url || null}, ${content}, ${credibilityScore}, ARRAY[${flags.join(",")}]::text[])
+      VALUES (${studentId}, ${url || null}, ${content}, ${credibilityScore}, ${flagsArray}::text[])
       RETURNING *
     `;
 
@@ -27,8 +33,10 @@ export async function POST(request: Request) {
       analysis: result[0],
     });
   } catch (error) {
+    console.error("Verify API error:", error);
     return NextResponse.json(
       {
+        success: false,
         error: "Failed to verify content",
         details: String(error),
       },
