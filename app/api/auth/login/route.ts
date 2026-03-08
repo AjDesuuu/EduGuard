@@ -15,7 +15,7 @@ export async function POST(request: Request) {
     if (result.length === 0) {
       return NextResponse.json(
         { success: false, error: "Invalid email or password" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     if (password !== expectedPassword) {
       return NextResponse.json(
         { success: false, error: "Invalid email or password" },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     console.error("Login error:", error);
     return NextResponse.json(
       { success: false, error: "Login failed", details: String(error) },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

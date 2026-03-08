@@ -35,7 +35,20 @@ export default function SignupPage() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
-  const { signup, loading } = useAuth();
+  const { signup, loading, isAuthenticated, user } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      // Redirect already logged-in users to their dashboard
+      if (user.role === 'educator') {
+        router.push('/educator/dashboard');
+      } else if (user.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  }, [isAuthenticated, user, router]);
 
   const interestOptions = [
     "Artificial Intelligence",

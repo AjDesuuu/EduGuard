@@ -5,7 +5,7 @@ const sql = neon(process.env.DATABASE_URL!);
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   try {
     const studentId = parseInt(params.id);
@@ -94,7 +94,7 @@ export async function GET(
         error: "Failed to fetch dashboard data",
         details: String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

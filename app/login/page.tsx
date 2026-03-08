@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Card, Button } from "@/components/UI";
@@ -13,7 +13,20 @@ export default function LoginPage() {
   const [role, setRole] = useState<"student" | "educator" | "admin">("student");
   const [error, setError] = useState("");
   const router = useRouter();
-  const { login, loading } = useAuth();
+  const { login, loading, isAuthenticated, user } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      // Redirect already logged-in users to their dashboard
+      if (user.role === 'educator') {
+        router.push('/educator/dashboard');
+      } else if (user.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/dashboard');
+      }
+    }
+  }, [isAuthenticated, user, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

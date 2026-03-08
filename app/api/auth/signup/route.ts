@@ -5,7 +5,8 @@ const sql = neon(process.env.DATABASE_URL!);
 
 export async function POST(request: Request) {
   try {
-    const { name, email, password, role, gradeLevel, interests, subject, bio } = await request.json();
+    const { name, email, password, role, gradeLevel, interests, subject, bio } =
+      await request.json();
 
     // Check if user already exists
     const existingUser = await sql`
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
     if (existingUser.length > 0) {
       return NextResponse.json(
         { success: false, error: "Email already registered" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -45,7 +46,7 @@ export async function POST(request: Request) {
     console.error("Signup error:", error);
     return NextResponse.json(
       { success: false, error: "Signup failed", details: String(error) },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
