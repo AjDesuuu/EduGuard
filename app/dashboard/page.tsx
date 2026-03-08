@@ -76,9 +76,10 @@ export default function Dashboard() {
         />
         <StatCard
           icon={<Award className="w-6 h-6" />}
-          title="Digital Literacy"
+          title="Modules"
           value={`${stats?.digitalLiteracyScore || 0}%`}
           color="text-purple-600"
+          description="Learn from verified materials by our educators"
         />
         <StatCard
           icon={<Clock className="w-6 h-6" />}
@@ -125,7 +126,7 @@ export default function Dashboard() {
             color="bg-blue-600"
           />
           <ProgressItem
-            title="Digital Literacy Skills"
+            title="Module Completion"
             progress={stats?.digitalLiteracyScore || 65}
             color="bg-purple-600"
           />
@@ -177,7 +178,7 @@ export default function Dashboard() {
           <li className="flex items-start gap-2">
             <span className="text-primary mt-1">•</span>
             <span>
-              Complete 2 more digital literacy modules to reach 75% proficiency
+              Complete 2 more modules to reach 75% proficiency
             </span>
           </li>
           <li className="flex items-start gap-2">
@@ -192,18 +193,23 @@ export default function Dashboard() {
   );
 }
 
-function StatCard({ icon, title, value, total, color }: any) {
+function StatCard({ icon, title, value, total, color, description }: any) {
   return (
     <Card className="flex items-start gap-4">
       <div className={`p-3 rounded-lg bg-gray-100 dark:bg-gray-700 ${color}`}>
         {icon}
       </div>
-      <div>
+      <div className="flex-1">
         <p className="text-sm text-gray-600 dark:text-gray-400">{title}</p>
         <p className="text-2xl font-bold">
           {value}
           {total && <span className="text-lg text-gray-500">/{total}</span>}
         </p>
+        {description && (
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            {description}
+          </p>
+        )}
       </div>
     </Card>
   );
