@@ -11,32 +11,27 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState<"student" | "educator" | "admin">("student");
+  const [error, setError] = useState("");
   const router = useRouter();
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
-    // Mock authentication - in production, this would call an API
-    const mockUser = {
-      id: "1",
-      name: email.split("@")[0],
-      email,
-      role,
-      gradeLevel: role === "student" ? "Undergraduate" : undefined,
-      interests: role === "student" ? ["AI", "Machine Learning"] : undefined,
-      subject: role === "educator" ? "Computer Science" : undefined,
-    };
+    const success = await login(email, password, role);
 
-    login(mockUser);
-
-    // Redirect based on role
-    if (role === "educator") {
-      router.push("/educator/dashboard");
-    } else if (role === "admin") {
-      router.push("/admin/dashboard");
+    if (success) {
+      // Redirect based on role
+      if (role === "educator") {
+        router.push("/educator/dashboard");
+      } else if (role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/dashboard");
+      }
     } else {
-      router.push("/dashboard");
+      setError("Invalid email or password. Try: emma@student.com / student123");
     }
   };
 
@@ -124,8 +119,14 @@ export default function LoginPage() {
               />
             </div>
 
-            <Button type="submit" className="w-full">
-              Sign In
+            {error && (
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-600 dark:text-red-400">
+                {error}
+              </div>
+            )}
+
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Signing In..." : "Sign In"}
             </Button>
           </form>
 
@@ -143,7 +144,7 @@ export default function LoginPage() {
         </Card>
 
         <p className="text-center text-xs text-gray-500">
-          Demo Mode: Any email/password will work
+          Test credentials: emma@student.com / student123
         </p>
       </div>
     </div>

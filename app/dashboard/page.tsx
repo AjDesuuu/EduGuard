@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, Badge, ProgressBar } from "@/components/UI";
+import { useAuth } from "@/context/AuthContext";
 import {
   TrendingUp,
   Award,
@@ -23,21 +24,22 @@ import {
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<any>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
-    fetchProgress();
-  }, []);
+    if (user?.id) {
+      fetchProgress();
+    }
+  }, [user]);
 
   const fetchProgress = async () => {
     try {
-      const response = await fetch("/api/progress");
+      const response = await fetch(`/api/user/${user?.id}`);
       const data = await response.json();
       setStats(data.stats);
       setLoading(false);
     } catch (error) {
       console.error("Failed to fetch progress:", error);
-      // Load mock data if API fails
-      setStats(mockStats);
       setLoading(false);
     }
   };

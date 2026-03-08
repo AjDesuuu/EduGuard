@@ -14,16 +14,76 @@ export async function GET() {
 
     // Create 10 Students
     const students = [
-      { name: "Emma Wilson", email: "emma@student.com", password: "student123", grade: "Elementary (K-5)", score: 75 },
-      { name: "Liam Chen", email: "liam@student.com", password: "student123", grade: "Elementary (K-5)", score: 82 },
-      { name: "Sophia Martinez", email: "sophia@student.com", password: "student123", grade: "Middle School (6-8)", score: 68 },
-      { name: "Noah Johnson", email: "noah@student.com", password: "student123", grade: "Middle School (6-8)", score: 90 },
-      { name: "Olivia Brown", email: "olivia@student.com", password: "student123", grade: "Middle School (6-8)", score: 77 },
-      { name: "Ethan Davis", email: "ethan@student.com", password: "student123", grade: "High School (9-12)", score: 85 },
-      { name: "Ava Garcia", email: "ava@student.com", password: "student123", grade: "High School (9-12)", score: 92 },
-      { name: "Mason Rodriguez", email: "mason@student.com", password: "student123", grade: "High School (9-12)", score: 71 },
-      { name: "Isabella Lee", email: "isabella@student.com", password: "student123", grade: "High School (9-12)", score: 88 },
-      { name: "James Taylor", email: "james@student.com", password: "student123", grade: "Elementary (K-5)", score: 79 },
+      {
+        name: "Emma Wilson",
+        email: "emma@student.com",
+        password: "student123",
+        grade: "Elementary (K-5)",
+        score: 75,
+      },
+      {
+        name: "Liam Chen",
+        email: "liam@student.com",
+        password: "student123",
+        grade: "Elementary (K-5)",
+        score: 82,
+      },
+      {
+        name: "Sophia Martinez",
+        email: "sophia@student.com",
+        password: "student123",
+        grade: "Middle School (6-8)",
+        score: 68,
+      },
+      {
+        name: "Noah Johnson",
+        email: "noah@student.com",
+        password: "student123",
+        grade: "Middle School (6-8)",
+        score: 90,
+      },
+      {
+        name: "Olivia Brown",
+        email: "olivia@student.com",
+        password: "student123",
+        grade: "Middle School (6-8)",
+        score: 77,
+      },
+      {
+        name: "Ethan Davis",
+        email: "ethan@student.com",
+        password: "student123",
+        grade: "High School (9-12)",
+        score: 85,
+      },
+      {
+        name: "Ava Garcia",
+        email: "ava@student.com",
+        password: "student123",
+        grade: "High School (9-12)",
+        score: 92,
+      },
+      {
+        name: "Mason Rodriguez",
+        email: "mason@student.com",
+        password: "student123",
+        grade: "High School (9-12)",
+        score: 71,
+      },
+      {
+        name: "Isabella Lee",
+        email: "isabella@student.com",
+        password: "student123",
+        grade: "High School (9-12)",
+        score: 88,
+      },
+      {
+        name: "James Taylor",
+        email: "james@student.com",
+        password: "student123",
+        grade: "Elementary (K-5)",
+        score: 79,
+      },
     ];
 
     const insertedStudents = [];
@@ -38,11 +98,27 @@ export async function GET() {
 
     // Create mock learning progress for each student
     const lessons = [
-      { id: "critical-thinking", title: "Critical Thinking Basics", difficulty: 1 },
-      { id: "source-evaluation", title: "Evaluating Information Sources", difficulty: 2 },
-      { id: "fact-checking", title: "Fact-Checking Fundamentals", difficulty: 2 },
+      {
+        id: "critical-thinking",
+        title: "Critical Thinking Basics",
+        difficulty: 1,
+      },
+      {
+        id: "source-evaluation",
+        title: "Evaluating Information Sources",
+        difficulty: 2,
+      },
+      {
+        id: "fact-checking",
+        title: "Fact-Checking Fundamentals",
+        difficulty: 2,
+      },
       { id: "ai-detection", title: "Identifying AI Content", difficulty: 3 },
-      { id: "media-literacy", title: "Media Literacy Essentials", difficulty: 2 },
+      {
+        id: "media-literacy",
+        title: "Media Literacy Essentials",
+        difficulty: 2,
+      },
     ];
 
     for (const student of insertedStudents) {
@@ -63,8 +139,12 @@ export async function GET() {
     }
 
     // Create quiz results for students
-    const quizzes = ["critical-thinking-quiz", "source-eval-quiz", "fact-check-quiz"];
-    
+    const quizzes = [
+      "critical-thinking-quiz",
+      "source-eval-quiz",
+      "fact-check-quiz",
+    ];
+
     for (const student of insertedStudents) {
       for (const quizId of quizzes) {
         const totalQuestions = 10;
@@ -81,9 +161,21 @@ export async function GET() {
 
     // Create digital literacy module completions
     const modules = [
-      { id: "source-eval", title: "Evaluating Source Credibility", category: "source-evaluation" },
-      { id: "fact-check", title: "Fact-Checking Basics", category: "fact-checking" },
-      { id: "ai-detection", title: "Identifying AI-Generated Content", category: "ai-detection" },
+      {
+        id: "source-eval",
+        title: "Evaluating Source Credibility",
+        category: "source-evaluation",
+      },
+      {
+        id: "fact-check",
+        title: "Fact-Checking Basics",
+        category: "fact-checking",
+      },
+      {
+        id: "ai-detection",
+        title: "Identifying AI-Generated Content",
+        category: "ai-detection",
+      },
     ];
 
     for (const student of insertedStudents) {
@@ -102,18 +194,31 @@ export async function GET() {
 
     // Create misinformation check history
     const sampleChecks = [
-      { url: "https://reliablenews.com/article", content: "Scientists discover new treatment for...", score: 85 },
-      { url: "https://socialmedia.com/post", content: "BREAKING: You won't believe what happened!!!", score: 35 },
-      { url: "https://university.edu/research", content: "According to recent study published in...", score: 92 },
+      {
+        url: "https://reliablenews.com/article",
+        content: "Scientists discover new treatment for...",
+        score: 85,
+      },
+      {
+        url: "https://socialmedia.com/post",
+        content: "BREAKING: You won't believe what happened!!!",
+        score: 35,
+      },
+      {
+        url: "https://university.edu/research",
+        content: "According to recent study published in...",
+        score: 92,
+      },
     ];
 
     for (const student of insertedStudents.slice(0, 5)) {
       for (const check of sampleChecks) {
-        const flags = check.score < 50 
-          ? ["Sensational language", "No source attribution"]
-          : check.score > 80 
-          ? [] 
-          : ["No publication date"];
+        const flags =
+          check.score < 50
+            ? ["Sensational language", "No source attribution"]
+            : check.score > 80
+              ? []
+              : ["No publication date"];
 
         await sql`
           INSERT INTO misinformation_checks
@@ -125,16 +230,49 @@ export async function GET() {
 
     // Return credentials for easy testing
     const credentials = {
-      students: students.map(s => ({ email: s.email, password: s.password, name: s.name })),
+      students: students.map((s) => ({
+        email: s.email,
+        password: s.password,
+        name: s.name,
+      })),
       educators: [
-        { email: "prof.smith@edu.com", password: "educator123", name: "Dr. Sarah Smith", subject: "Computer Science" },
-        { email: "prof.jones@edu.com", password: "educator123", name: "Prof. Michael Jones", subject: "Mathematics" },
-        { email: "prof.williams@edu.com", password: "educator123", name: "Dr. Emily Williams", subject: "Digital Literacy" },
-        { email: "prof.davis@edu.com", password: "educator123", name: "Prof. David Davis", subject: "Critical Thinking" },
-        { email: "prof.miller@edu.com", password: "educator123", name: "Dr. Lisa Miller", subject: "Media Studies" },
+        {
+          email: "prof.smith@edu.com",
+          password: "educator123",
+          name: "Dr. Sarah Smith",
+          subject: "Computer Science",
+        },
+        {
+          email: "prof.jones@edu.com",
+          password: "educator123",
+          name: "Prof. Michael Jones",
+          subject: "Mathematics",
+        },
+        {
+          email: "prof.williams@edu.com",
+          password: "educator123",
+          name: "Dr. Emily Williams",
+          subject: "Digital Literacy",
+        },
+        {
+          email: "prof.davis@edu.com",
+          password: "educator123",
+          name: "Prof. David Davis",
+          subject: "Critical Thinking",
+        },
+        {
+          email: "prof.miller@edu.com",
+          password: "educator123",
+          name: "Dr. Lisa Miller",
+          subject: "Media Studies",
+        },
       ],
       admin: [
-        { email: "admin@eduguard.com", password: "admin123", name: "Admin User" },
+        {
+          email: "admin@eduguard.com",
+          password: "admin123",
+          name: "Admin User",
+        },
       ],
     };
 
@@ -158,7 +296,7 @@ export async function GET() {
         error: "Failed to seed database",
         details: String(error),
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -20,16 +20,18 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (user: User) => void;
+  login: (email: string, password: string, role: string) => Promise<boolean>;
   logout: () => void;
-  signup: (userData: any) => void;
+  signup: (userData: any) => Promise<boolean>;
   isAuthenticated: boolean;
+  loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     // Load user from localStorage on mount
@@ -39,9 +41,31 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const login = (userData: User) => {
-    setUser(userData);
-    localStorage.setItem("eduguard_user", JSON.stringify(userData));
+  const login = async (email: string, password: string, role: string) => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, role }),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.user) {
+        setUser(data.user);
+        localStorage.setItem("eduguard_user", JSON.stringify(data.user));
+        setLoading(false);
+        return true;
+      } else {
+        setLoading(false);
+        return false;
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setLoading(false);
+      return false;
+    }
   };
 
   const logout = () => {
@@ -49,17 +73,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem("eduguard_user");
   };
 
-  const signup = (userData: any) => {
-    const newUser: User = {
-      id: Date.now().toString(),
-      ...userData,
-    };
-    login(newUser);
+  const signup = async (userData: any) => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+      });
+
+      const data = await response.json();
+
+      if (data.success && data.user) {
+        setUser(data.user);
+        localStorage.setItem("eduguard_user", JSON.stringify(data.user));
+        setLoading(false);
+        return true;
+      } else {
+        setLoading(false);
+        return false;
+      }
+    } catch (error) {
+      console.error("Signup error:", error);
+      setLoading(false);
+      return false;
+    }
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, signup, isAuthenticated: !!user }}
+      value={{ user, login, logout, signup, isAuthenticated: !!user, loading }}
     >
       {children}
     </AuthContext.Provider>

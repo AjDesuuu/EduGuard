@@ -30,11 +30,12 @@ export default function SignupPage() {
   });
   const [interestInput, setInterestInput] = useState("");
   const [showDropdown, setShowDropdown] = useState(false);
+  const [error, setError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const router = useRouter();
-  const { signup } = useAuth();
+  const { signup, loading } = useAuth();
 
   const interestOptions = [
     "Artificial Intelligence",
@@ -120,21 +121,26 @@ export default function SignupPage() {
     }
   };
 
-  const handleSignup = (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
 
-    signup({
+    const success = await signup({
       ...formData,
       role,
     });
 
-    // Redirect based on role
-    if (role === "educator") {
-      router.push("/educator/dashboard");
-    } else if (role === "admin") {
-      router.push("/admin/dashboard");
+    if (success) {
+      // Redirect based on role
+      if (role === "educator") {
+        router.push("/educator/dashboard");
+      } else if (role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/dashboard");
+      }
     } else {
-      router.push("/dashboard");
+      setError("Signup failed. Email may already be registered.");
     }
   };
 
@@ -394,17 +400,24 @@ export default function SignupPage() {
                 </>
               )}
 
+              {error && (
+                <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-3 text-sm text-red-600 dark:text-red-400">
+                  {error}
+                </div>
+              )}
+
               <div className="flex gap-3">
                 <Button
                   type="button"
                   onClick={() => setStep(1)}
                   variant="secondary"
                   className="flex-1"
+                  disabled={loading}
                 >
                   Back
                 </Button>
-                <Button type="submit" className="flex-1">
-                  Create Account
+                <Button type="submit" className="flex-1" disabled={loading}>
+                  {loading ? "Creating Account..." : "Create Account"}
                 </Button>
               </div>
             </form>
