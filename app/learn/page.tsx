@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { Card, Button, Badge, ProgressBar } from "@/components/UI";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -565,7 +565,7 @@ const pathways: Pathway[] = [
   },
 ];
 
-export default function LearnPage() {
+function LearnPageContent() {
   const [selectedCareer, setSelectedCareer] = useState<string | null>(null);
   const [selectedPathway, setSelectedPathway] = useState<Pathway | null>(null);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
@@ -1226,5 +1226,19 @@ export default function LearnPage() {
         </div>
       </Card>
     </div>
+  );
+}
+
+export default function LearnPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      }
+    >
+      <LearnPageContent />
+    </Suspense>
   );
 }
