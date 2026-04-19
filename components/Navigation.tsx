@@ -1,32 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Home,
   TrendingUp,
   Shield,
   BookOpen,
   BarChart3,
-  LogOut,
   User,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export default function Navigation() {
   const pathname = usePathname();
-  const router = useRouter();
-  const { user, logout, isAuthenticated } = useAuth();
-
-  // Don't show navigation on login/signup pages
-  if (pathname === "/login" || pathname === "/signup") {
-    return null;
-  }
-
-  const handleLogout = () => {
-    logout();
-    router.push("/login");
-  };
+  const { user, isAuthenticated } = useAuth();
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
@@ -73,22 +61,8 @@ export default function Navigation() {
                     <User className="w-4 h-4" />
                     <span className="text-sm">{user?.name}</span>
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <LogOut className="w-5 h-5" />
-                    <span>Logout</span>
-                  </button>
                 </div>
-              ) : (
-                <Link
-                  href="/login"
-                  className="ml-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
-                >
-                  Sign In
-                </Link>
-              )}
+              ) : null}
             </div>
           </div>
         </div>

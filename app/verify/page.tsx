@@ -177,17 +177,35 @@ export default function VerifyPage() {
               </p>
             </div>
 
+            <div
+              className={`rounded-lg p-4 mb-2 ${result.credibilityScore >= 75 ? "bg-green-50 dark:bg-green-900/30 border border-green-200" : result.credibilityScore >= 50 ? "bg-yellow-50 dark:bg-yellow-900/30 border border-yellow-200" : "bg-red-50 dark:bg-red-900/30 border border-red-200"}`}
+            >
+              <h3 className="font-bold mb-2">Why this score?</h3>
+              <p className="text-sm">
+                {result.credibilityScore >= 75
+                  ? "This content shows strong credibility signals: it likely includes identifiable sources, author information, and supporting evidence. While no automated check is definitive, the indicators suggest this is a relatively trustworthy source."
+                  : result.credibilityScore >= 50
+                    ? "This content has mixed credibility signals. Some indicators are present but others are missing. We recommend cross-referencing with additional trusted sources before relying on this information."
+                    : "This content is missing several key credibility indicators. The absence of sources, citations, or author information makes it difficult to verify. Treat this content with caution and seek corroborating evidence from established sources."}
+              </p>
+            </div>
+
             {result.flags.length > 0 && (
               <div className="bg-orange-50 dark:bg-orange-900 rounded-lg p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <AlertTriangle className="w-5 h-5 text-orange-600" />
                   Potential Issues Detected
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-3">
                   {result.flags.map((flag, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm">
-                      <XCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
-                      <span>{flag}</span>
+                    <li key={index} className="text-sm">
+                      <div className="flex items-start gap-2 font-medium">
+                        <XCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
+                        <span>{flag}</span>
+                      </div>
+                      <p className="ml-6 text-xs text-gray-600 dark:text-gray-400 mt-1">
+                        {getFlagExplanation(flag)}
+                      </p>
                     </li>
                   ))}
                 </ul>
@@ -198,13 +216,22 @@ export default function VerifyPage() {
           <Card>
             <h3 className="font-bold mb-3 flex items-center gap-2">
               <CheckCircle className="w-5 h-5 text-primary" />
-              Credibility Indicators
+              Credibility Indicators Explained
             </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Each indicator below contributes to the overall credibility score.
+              Understanding these helps you evaluate any content you encounter
+              online.
+            </p>
             <div className="grid md:grid-cols-2 gap-4">
               <IndicatorItem
                 label="Source URL"
                 status={url ? "present" : "missing"}
-                description={url ? "Source URL provided" : "No source URL"}
+                description={
+                  url
+                    ? `Source provided: ${url.includes(".edu") || url.includes(".gov") ? "Educational/government domain (high trust)" : url.includes(".org") ? "Organization domain (moderate trust)" : "Commercial/other domain (verify independently)"}`
+                    : "No source URL — claims without a traceable source are harder to verify"
+                }
               />
               <IndicatorItem
                 label="Author Attribution"
@@ -213,7 +240,11 @@ export default function VerifyPage() {
                     ? "present"
                     : "missing"
                 }
-                description="Author information"
+                description={
+                  content.includes("author") || content.includes("by ")
+                    ? "Author identified — you can research their credentials and expertise"
+                    : "No author found — anonymous content lacks accountability"
+                }
               />
               <IndicatorItem
                 label="Publication Date"
@@ -222,7 +253,11 @@ export default function VerifyPage() {
                     ? "present"
                     : "missing"
                 }
-                description="Date information found"
+                description={
+                  /\d{4}/.test(content) || /\d{4}/.test(url)
+                    ? "Date information found — helps assess if the information is still current"
+                    : "No date found — outdated information may no longer be accurate"
+                }
               />
               <IndicatorItem
                 label="References/Citations"
@@ -231,7 +266,11 @@ export default function VerifyPage() {
                     ? "present"
                     : "missing"
                 }
-                description="Citations in content"
+                description={
+                  content.includes("References") || content.match(/\[\d+\]/)
+                    ? "Citations found — claims are backed by traceable sources"
+                    : "No citations — claims cannot be verified against original sources"
+                }
               />
             </div>
           </Card>
@@ -366,6 +405,27 @@ function ExampleCard({
         <span className={`font-bold ${color}`}>{score}/100</span>
       </div>
     </button>
+  );
+}
+
+function getFlagExplanation(flag: string): string {
+  const explanations: Record<string, string> = {
+    "No source URL provided":
+      "Without a source URL, there is no way to trace this information back to its origin. Credible content typically comes from identifiable, verifiable sources.",
+    "Unsecure connection (HTTP)":
+      "HTTPS encrypts data in transit. Reputable sites use HTTPS. An HTTP-only site may indicate a less professional or potentially risky source.",
+    "No publication date found":
+      "Publication dates help you assess whether information is current. Outdated content may contain facts that have since been corrected or updated.",
+    "No author attribution":
+      "Knowing who wrote the content lets you evaluate their expertise and potential biases. Anonymous content lacks accountability.",
+    "No references or citations":
+      "Credible claims are backed by evidence. Without references, there is no way to verify the underlying facts or check if they have been accurately represented.",
+    "Sensationalist language detected":
+      "Excessive punctuation, ALL CAPS, and dramatic phrasing are common in misleading content. Reliable sources use measured, factual language.",
+  };
+  return (
+    explanations[flag] ||
+    "This indicator may affect the reliability of the content. Investigate further before trusting this source."
   );
 }
 

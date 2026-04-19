@@ -29,17 +29,27 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+// Demo user for easy demo access - no login required
+const DEMO_USER: User = {
+  id: "1",
+  name: "Emma Rodriguez",
+  email: "emma@student.com",
+  role: "student",
+  gradeLevel: "High School (9-12)",
+  interests: ["Artificial Intelligence", "Cybersecurity", "Data Science"],
+};
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  // Auto-login as demo user for demo mode
+  const [user, setUser] = useState<User | null>(DEMO_USER);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Load user from localStorage on mount
-    const savedUser = localStorage.getItem("eduguard_user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
+    // Always ensure demo user is set for demo mode
+    if (!user) {
+      setUser(DEMO_USER);
     }
-  }, []);
+  }, [user]);
 
   const login = async (email: string, password: string, role: string) => {
     setLoading(true);

@@ -18,19 +18,25 @@ export async function POST(request: Request) {
         ? `{${flags.map((f) => `"${f.replace(/"/g, '\\"')}"`).join(",")}}`
         : "{}";
 
-    // Save to database
-    const result = await sql`
-      INSERT INTO misinformation_checks 
-      (student_id, url, content, credibility_score, flags)
-      VALUES (${studentId}, ${url || null}, ${content}, ${credibilityScore}, ${flagsArray}::text[])
-      RETURNING *
-    `;
+    // Try to save to database, but don't fail if the student doesn't exist
+    let analysis = null;
+    try {
+      const result = await sql`
+        INSERT INTO misinformation_checks 
+        (student_id, url, content, credibility_score, flags)
+        VALUES (${studentId}, ${url || null}, ${content}, ${credibilityScore}, ${flagsArray}::text[])
+        RETURNING *
+      `;
+      analysis = result[0];
+    } catch (dbError) {
+      console.warn("Could not save check to database:", dbError);
+    }
 
     return NextResponse.json({
       success: true,
       credibilityScore,
       flags,
-      analysis: result[0],
+      analysis,
     });
   } catch (error) {
     console.error("Verify API error:", error);
