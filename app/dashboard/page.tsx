@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Card, Badge, ProgressBar } from "@/components/UI";
+import { Card, Badge, ProgressBar, Button } from "@/components/UI";
 import { useAuth } from "@/context/AuthContext";
+import Link from "next/link";
 import {
   TrendingUp,
   Award,
@@ -10,6 +11,8 @@ import {
   Target,
   BookOpen,
   AlertTriangle,
+  Download,
+  CheckCircle,
 } from "lucide-react";
 import {
   LineChart,
@@ -113,6 +116,44 @@ export default function Dashboard() {
               />
             </LineChart>
           </ResponsiveContainer>
+        </div>
+      </Card>
+
+      {/* Completed Pathways - Certificates Available */}
+      <Card>
+        <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
+          <Award className="w-6 h-6 text-primary" />
+          Your Certificates
+        </h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Generate certificates for your completed learning pathways
+        </p>
+        <div className="space-y-3">
+          {/* Example completed pathways - in production, this would come from API */}
+          <CompletedPathwayItem
+            title="AI & ML Fundamentals"
+            completedDate="March 15, 2026"
+            score={85}
+            pathwayId="ai-fundamentals"
+          />
+          <CompletedPathwayItem
+            title="Digital Safety & Misinformation"
+            completedDate="April 2, 2026"
+            score={92}
+            pathwayId="digital-safety"
+          />
+          <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg text-center">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Complete more pathways in the{" "}
+              <Link
+                href="/learn"
+                className="text-primary hover:underline font-medium"
+              >
+                Learning page
+              </Link>{" "}
+              to earn more certificates
+            </p>
+          </div>
         </div>
       </Card>
 
@@ -236,6 +277,39 @@ function ActivityItem({ title, score, date }: any) {
         <p className="text-sm text-gray-600 dark:text-gray-400">{date}</p>
       </div>
       <Badge variant={scoreColor}>{score}%</Badge>
+    </div>
+  );
+}
+
+function CompletedPathwayItem({ title, completedDate, score, pathwayId }: any) {
+  const handleGenerateCertificate = () => {
+    // In production, this would navigate to the certificate view or trigger certificate generation
+    window.location.href = `/learn?generateCert=${pathwayId}`;
+  };
+
+  return (
+    <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20 rounded-lg border border-green-200 dark:border-green-800">
+      <div className="flex items-start gap-3">
+        <div className="p-2 bg-green-100 dark:bg-green-900/50 rounded-lg">
+          <CheckCircle className="w-5 h-5 text-green-600" />
+        </div>
+        <div>
+          <p className="font-semibold">{title}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
+            Completed: {completedDate}
+          </p>
+          <div className="flex items-center gap-2 mt-1">
+            <Badge variant="success">Score: {score}%</Badge>
+          </div>
+        </div>
+      </div>
+      <Button
+        onClick={handleGenerateCertificate}
+        className="flex items-center gap-2"
+      >
+        <Download className="w-4 h-4" />
+        Get Certificate
+      </Button>
     </div>
   );
 }
